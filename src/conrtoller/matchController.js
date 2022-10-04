@@ -11,15 +11,11 @@ exports.getData = async (req, res) => {
             data = resp.data.result.result
         });
         for (let i = 0; i < data.length; i++) {
-            const resorce = new model({
-                EventId: data[i]["eventName"],
+            await model.create({EventId: data[i]["eventName"],
                 EventName: data[i]["eventName"],
-                MarketId: data[i]["marketId"]
-            })
-            resorce.save()
-            console.log("Saving ....")
+                MarketId: data[i]["marketId"]})
         }
         }
-        setInterval(fetchData,50000)
-        // return res.send(data)
+        setInterval(fetchData,100000)
+       
 }
