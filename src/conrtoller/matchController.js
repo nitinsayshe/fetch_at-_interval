@@ -11,11 +11,11 @@ exports.getData = async (req, res) => {
             data = resp.data.result.result
         });
         for (let i = 0; i < data.length; i++) {
-            await model.create({EventId: data[i]["eventName"],
+            await model.create({EventId: data[i]["eventId"],
                 EventName: data[i]["eventName"],
                 MarketId: data[i]["marketId"]})
+                console.log(`Updating data...${i+1}`)
         }
         }
-        setInterval(fetchData,100000)
-       
+        setInterval(fetchData,10000,"Loading Data....")
 }
