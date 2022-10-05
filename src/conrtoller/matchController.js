@@ -5,17 +5,27 @@ const model = require("../models/model");
 
 
 exports.getData = async (req, res) => {
-        async function fetchData(){
+    // function to fetch and store the data in mongodb    
+    async function fetchData(){ 
             let data;
+            //fetch data from api using axios
         await axios.get('http://143.198.116.255:7000/match-list?token=nit456789plijnyhbfvrdcsdfghj').then(async (resp) => {
             data = resp.data.result.result
         });
+
         for (let i = 0; i < data.length; i++) {
-            await model.create({EventId: data[i]["eventId"],
+            let findEvent=await model.findOneAndUpdate({EventId: data[i]["eventId"]},{EventName: data[i]["eventName"],MarketId: data[i]["marketId"]})
+            console.log(findEvent)
+            if(!findEvent){
+                await model.create({EventId: data[i]["eventId"],
                 EventName: data[i]["eventName"],
                 MarketId: data[i]["marketId"]})
+                console.log(`Created data...${i+1}`)
+            }else{
                 console.log(`Updating data...${i+1}`)
+            }
+            
         }
         }
-        setInterval(fetchData,10000,"Loading Data....")
+        setInterval(fetchData,100000,"Loading Data....")
 }
